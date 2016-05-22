@@ -33,14 +33,19 @@ test = test_df['y']
 
 
 lin = poly_train1.predict()
-predict_lin_df = pd.DataFrame(lin)
+lin = lin[400:]
+# predict_lin_df = pd.DataFrame(lin) to look at the data visually
+
 
 
 quad = poly_train2.predict()
-predict_quad_df = pd.DataFrame(quad)
+quad = quad[400:]
 
+# predict_quad_df = pd.DataFrame(quad) to look at the data visually
 
 print(mean_squared_error(test,lin))
+print(mean_squared_error(test,quad))
+
 
 
 # print(test_df)
