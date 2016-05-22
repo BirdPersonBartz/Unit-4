@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import statsmodels.formula.api as smf
+from sklearn.metrics import mean_squared_error
 
 # Set seed for reproducible results
 np.random.seed(414)
@@ -21,24 +22,31 @@ poly_train1 = smf.ols(formula='y ~ 1 + X', data=train_df).fit()
 # Quadratic Fit
 poly_train2 = smf.ols(formula='y ~ 1 + X + I(X**2)', data=train_df).fit()
 
-#lin test
-poly_test1 = smf.ols(formula='y ~ 1 + X', data=test_df).fit()
-# Quad test
-poly_test2 = smf.ols(formula='y ~ 1 + X + I(X**2)', data=test_df).fit()
+# #lin test
+# poly_test1 = smf.ols(formula='y ~ 1 + X', data=test_df).fit()
+# # Quad test
+# poly_test2 = smf.ols(formula='y ~ 1 + X + I(X**2)', data=test_df).fit()
+
+test = test_df['y']
 
 
 
 
-
-print("mse_model")
-print("Lin train: ", poly_train1.mse_model)
-print("Quad train: ", poly_train2.mse_model)
-print("Lin test: ", poly_test1.mse_model)
-print("Quad test: ", poly_test2.mse_model)
+lin = poly_train1.predict()
+predict_lin_df = pd.DataFrame(lin)
 
 
-print("mse_residual")
-print("Lin train: ", poly_train1.mse_resid)
-print("Quad train: ", poly_train2.mse_resid)
-print("Lin test: ", poly_test1.mse_resid)
-print("Quad test: ", poly_test2.mse_resid)
+quad = poly_train2.predict()
+predict_quad_df = pd.DataFrame(quad)
+
+
+print(mean_squared_error(test,lin))
+
+
+# print(test_df)
+# print(predict_lin_df)
+# print(predict_quad_df)
+
+
+
+
