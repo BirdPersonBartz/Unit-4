@@ -1,12 +1,21 @@
 
 # coding: utf-8
 
+# In[2]:
+
+
+
+
 # In[132]:
 
 import pandas as pd
 import re
 import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
+import numpy as np
+import sklearn.metrics as mets
+import seaborn as sea
+
 
 
 
@@ -84,15 +93,58 @@ cv_set = data[(data["subjects"] >= 21) & (data['subjects'] < 27)]
 xtraining_set = training_set.drop(['activity','subjects'], axis=1)
 ytraining_set = training_set['activity']
 
+xtest_set = test_set.drop(['activity','subjects'], axis=1)
+ytest_set = test_set['activity']
 
-clf = RandomForestClassifier(n_estimators=500, oob_score=True)
-clf.fit(xtraining_set, ytraining_set)
-print(clf.oob_score_)
+xcv_set = cv_set.drop(['activity','subjects'], axis=1)
+ycv_set = cv_set['activity']
+
+forest = RandomForestClassifier(n_estimators=500, oob_score=True)
+forest.fit(xtraining_set, ytraining_set)
+print(forest.oob_score_)
 
 
-# In[ ]:
 
 
+
+# In[14]:
+
+
+feat = forest.feature_importances_
+featindex = np.argsort(feat)[::-1]
+for i in range(10):
+    print(1+i, featindex[i], round(feat[featindex[i]],5))
+
+    
+
+
+# In[15]:
+
+ypredicted_set = forest.predict(xtest_set)
+
+print('Test score')
+print(forest.score(xtest_set, ytest_set))
+
+print('Eval score')
+print(forest.score(xcv_set, ycv_set))
+
+
+# In[16]:
+
+confumatrix = mets.confusion_matrix(ytest_set, ypredicted_set)
+sea.heatmap(data = confumatrix)
+sea.plt.show()
+
+
+
+# In[18]:
+
+print('accuracy')
+print(round(mets.precision_score(ytest_set, ypredicted_set),5))
+print('recall')
+print(round(mets.recall_score(ytest_set, ypredicted_set),5))
+print('f1')
+print(round(mets.f1_score(ytest_set, ypredicted_set),5))
 
 
 # In[ ]:
