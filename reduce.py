@@ -13,6 +13,9 @@ import matplotlib.pyplot as plt
 from random import randint
 
 #load data
+iris = datasets.load_iris()
+
+X = iris.data
 
 df = pd.DataFrame(X, columns = iris.feature_names)
 # 1 = setosa 2 = versicolor 3 = virginica
